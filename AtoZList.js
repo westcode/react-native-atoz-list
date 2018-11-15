@@ -34,7 +34,6 @@ export default class AtoZList extends Component {
     renderCell: PropTypes.func,
     renderSection: PropTypes.func,
     onEndReached: PropTypes.func,
-    onScroll: PropTypes.func,
   };
 
   constructor(props, context) {
@@ -73,27 +72,26 @@ export default class AtoZList extends Component {
 
   render() {
     this._alphabetInstance = (
-      <View style={styles.alphabetSidebar}>
-        <AlphabetPicker alphabet={this.state.alphabet} onTouchLetter={this._onTouchLetter.bind(this)} />
+      <View style={styles.alphabetSidebar}>       
+        <AlphabetPicker alphabet={this.state.alphabet} onTouchLetter={this._onTouchLetter.bind(this)} alphabetContainerStyle={this.props.alphabetContainerStyle} letterPickerStyle={this.props.letterPickerStyle} />
       </View>
     );
 
     return (
       <View style={{flex: 1}}>
-        <View style={styles.container}>
+        <View style={[styles.container, this.props.containerStyle]}>
           <FixedHeightWindowedListView
             ref={view => this._listView = view}
             dataSource={this.state.dataSource}
             renderCell={this.props.renderCell}
             renderSectionHeader={this.props.renderSection}
-            incrementDelay={16}
-            initialNumToRender={8}
-            pageSize={Platform.OS === 'ios' ? 15 : 8}
-            maxNumToRender={70}
-            numToRenderAhead={40}
-            numToRenderBehind={4}
+            incrementDelay={this.props.incrementDelay}
+            initialNumToRender={this.props.initialNumToRender}
+            pageSize={this.props.pageSize}
+            maxNumToRender={this.props.maxNumToRender}
+            numToRenderAhead={this.props.numToRenderAhead}
+            numToRenderBehind={this.props.numToRenderBehind}
             onEndReached={this.props.onEndReached}
-            onScroll={this.props.onScroll}
           />
         </View>
         {this._alphabetInstance}
@@ -105,9 +103,6 @@ export default class AtoZList extends Component {
     this._listView.scrollToSectionBuffered(letter);
   }
 }
-
-
-
 
 const styles = StyleSheet.create({
   container: {

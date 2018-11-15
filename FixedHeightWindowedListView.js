@@ -226,11 +226,11 @@ export default class FixedHeightWindowedListView extends Component {
         parentSectionId = this.props.dataSource.getSectionId(idx)
         key = `${key}-${id}`;
       }
-
+	  
       rows.push(
         <CellRenderer
           key={key}
-          shouldUpdate={data !== this.__rowCache[key]}
+          shouldUpdate={!data.sectionId || data !== this.__rowCache[key]}
           render={this.__renderRow.bind(this, data, parentSectionId, idx, key)}
         />
       );
@@ -263,9 +263,6 @@ export default class FixedHeightWindowedListView extends Component {
         // ScrollEnd
         this.props.onEndReached(e);
       }
-    }
-    if (this.props.onScroll) {
-      this.props.onScroll(e);
     }
   }
 
@@ -398,7 +395,6 @@ FixedHeightWindowedListView.propTypes = {
   numToRenderBehind: PropTypes.number,
   pageSize: PropTypes.number,
   onEndReached: PropTypes.func,
-  onScroll: PropTypes.func,
 };
 
 FixedHeightWindowedListView.defaultProps = {
